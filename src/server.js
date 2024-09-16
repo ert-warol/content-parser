@@ -27,28 +27,25 @@ const start = async () => {
 		  {
 				resource: Announcements,
 				options: {
-					listProperties: ['img', 'title', 'price', 'proizvodstvo', 'skorosti', 'probeg'],
+					listProperties: ['img', 'category', 'title', 'price', 'proizvodstvo', 'skorosti', 'probeg'],
+					showProperties: ['category', 'img', 'link', 'title', 'price', 'proizvodstvo', 'dvigatel', 'moshtnost', 'euro', 'skorosti', 'probeg'],
 					sort: {
 						price: 'updatedAt',
 						direction: 'desc',
 					},
 					properties: {
-						// image: {
-						// 	type: 'img',
-						// 	// reference: 'img',
-						// 	props: {
-						// 		id: 'image',
-						// 		src: 'https://mobistatic2.focus.bg/mobile/photosorg/648/1/11725028685739648_a5.webp',
-						// 	},
-						// 	components: {
-						// 		list: Components.CustomImage,
-						// 		show: Components.CustomImage,
-						// 	},
-						// },
 						img: {
 							type: 'string',
 							components: {
-								list: Components.CustomImage
+								list: Components.CustomImage,
+								show: Components.CustomImage
+							},
+						},
+						link: {
+							type: 'string',
+							components: {
+								list: Components.CustomLink,
+								show: Components.CustomLink
 							},
 						},
 					},
@@ -114,5 +111,10 @@ const start = async () => {
 		}
 	})
 }
+
+process.on('SIGINT', () => {
+	console.log('Server shutting down...')
+  process.exit(0)
+})
 
 start()

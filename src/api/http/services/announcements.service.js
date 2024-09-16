@@ -1,7 +1,6 @@
 import puppeteer from 'puppeteer'
 
 import Announcements from './../models/announcements.model.js'
-import { splitArrayIntoFourChunks } from './../../helpers/helper.js'
 
 export const getProcessedAnnouncements = () => {
 	return {}
@@ -32,8 +31,6 @@ export const processingAnnouncements = async ({ domain, year }) => {
 
 		dataObj.errors.push(err.message)
 	}
-
-	return {}
 }
 
 function getPopularCategories () {
@@ -83,7 +80,6 @@ function getMainDetails (data) {
 			continue
 		}
 
-		const img = document.querySelector('.ads2023 .big .pic').getAttribute('src') || 'none'
 		const title = document.querySelector(`#${id} .text .zaglavie .title`)
 		const price = document.querySelector(`#${id} .text .price div`).innerText
 		const obj = {
@@ -91,8 +87,7 @@ function getMainDetails (data) {
 			category,
 			title: title.innerHTML || '',
 			price: Number(price.replaceAll(' ','').replaceAll('лв.','')) || 0,
-			link: `https:${title.getAttribute('href')}`,
-			img
+			link: `https:${title.getAttribute('href')}`
 		}
 
 		listOfItems.push(obj)
@@ -112,6 +107,9 @@ function addNewProperties (item) {
 		return arr[arr.length - 1]
 	}
 	const mainCarParams = document.querySelectorAll('.mainCarParams .item')
+	const img = document.querySelector('.owl-item.active .carouselimg.owl-lazy')
+
+	item['img'] = img ? img.getAttribute('src')  : 'none'
 
 	for (const child of Array.from(mainCarParams))  {
 		const [_label, value] = child.innerText.split('\n')
@@ -126,6 +124,20 @@ function addNewProperties (item) {
 		} else {
 			item[label] = value
 		}
+	}
+
+	if (!item['proizvodstvo']) {
+		const techData = document.querySelectorAll('.techData .item')
+		const dateOfProduction = Array.from(techData)
+			.reduce((value, item) => {
+				if (item.querySelectorAll('div')[0].innerText !== 'Дата на производство') {
+					return value
+				}
+
+				return item.querySelectorAll('div')[1].innerText
+			}, '')
+
+		item['proizvodstvo'] = getLastArrItem(dateOfProduction)
 	}
 
 	return item
@@ -177,8 +189,8 @@ async function processAnnouncementsFromCategory ({ category, domain, browser }) 
 		await wittingForSelectors(page)
 
 		mapOfAnnouncements.currentListPage = page.url()
-
-		while(mapOfAnnouncements.existNextPage || mapOfAnnouncements.counter < 100) {
+// && mapOfAnnouncements.counter < 100
+		while(mapOfAnnouncements.existNextPage) {
 			const announcements = []
 			const rejectedAnnouncementIds = []
 			const data = { category, announcementIds }
@@ -221,7 +233,7 @@ async function processAnnouncementsFromCategory ({ category, domain, browser }) 
 		}
 		await page.close()
 	} catch (e) {
-		console.error('An error occurred:', e)
+			console.error('An error occurred:', e)
 	}
 }
 
