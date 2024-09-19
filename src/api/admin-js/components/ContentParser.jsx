@@ -72,10 +72,10 @@ const ContentParser = () => {
 	}
 
 	return (
-		<div className="custom-page" style={{width: 'max-content', margin: '0 auto', padding: '20px', 'background-color': '#f9f9f9', 'border-radius': '8px', 'box-shadow': '0 0 10px rgba(0, 0, 0, 0.1)'}}>
-			<h1 style={{'text-align': 'center', 'margin-bottom': '20px'}}>Category Form</h1><br/>
+		<div className="custom-page">
+			<h1>Category Form</h1><br/>
 			<form onSubmit={handleSubmit}>
-				<div className="form-group" style={{'margin-bottom': '15px'}}>
+				<div className="form-group">
 					<label>Category:</label>
 					<select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
 						<option value="">Select a category</option>
@@ -85,7 +85,7 @@ const ContentParser = () => {
 					</select>
 					{errors.selectedCategory && <span className="error">{errors.selectedCategory}</span>}
 				</div>
-				<div className="form-group" style={{'margin-bottom': '15px'}}>
+				<div className="form-group">
 					<label>Production Years:</label>
 					<select value={productionYearFrom} onChange={(e) => setProductionYearFrom(e.target.value)}>
 						<option value="">2017</option>
@@ -116,12 +116,15 @@ const ContentParser = () => {
 					{/*<input type="text" value={transmission} onChange={(e) => setTransmission(e.target.value)}/>*/}
 					{errors.transmission && <span className="error">{errors.transmission}</span>}
 				</div>
-				<div className="form-group" style={{'margin-bottom': '15px'}}>
+				<div className="form-group price-interval" style={{'margin-bottom': '15px'}}>
 					<label>Price:</label>
-					<input type="number" placeholder="From" value={priceFrom} onChange={(e) => setPriceFrom(e.target.value)}/>
-					{errors.priceFrom && <span className="error">{errors.priceFrom}</span>}
-					<input type="number" placeholder="To" value={priceTo} onChange={(e) => setPriceTo(e.target.value)} />
-					{errors.priceTo && <span className="error">{errors.priceTo}</span>}
+					<div className="interval">
+						<input type="number" placeholder="From" value={priceFrom} onChange={(e) => setPriceFrom(e.target.value)}/>
+						{errors.priceFrom && <span className="error">{errors.priceFrom}</span>}
+						<input type="number" placeholder="To" value={priceTo} onChange={(e) => setPriceTo(e.target.value)} />
+						{errors.priceTo && <span className="error">{errors.priceTo}</span>}
+					</div>
+
 				</div>
 				<button type="submit">Submit</button>
 			</form>
