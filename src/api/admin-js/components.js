@@ -4,7 +4,8 @@ const componentLoader = new ComponentLoader()
 
 const Components = {
 	CustomImage: componentLoader.add('CustomImage', './components/CustomImage.jsx'),
-	CustomLink: componentLoader.add('CustomLink', './components/CustomLink.jsx'),
+	CustomTitle: componentLoader.add('CustomTitle', './components/CustomTitle.jsx'),
+	ContentParserPage: componentLoader.add('ContentParserPage', './components/ContentParser.jsx'),
 }
 
 export { componentLoader, Components }

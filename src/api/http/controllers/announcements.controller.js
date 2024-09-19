@@ -21,7 +21,7 @@ export const proceed = async (request, response) => {
 
 		response.status(201)
 
-		// return processedAnnouncements
+		return { success: true, errors: [] }
 	} catch (e) {
 		return {
 			error: e.message
