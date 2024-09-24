@@ -6,7 +6,7 @@ export const getProcessedAnnouncements = () => {
 	return {}
 }
 
-export const processingAnnouncements = async ({ domain, year }) => {
+export const processingAnnouncements = async params => {
 	const dataObj = {
 		item: [],
 		errors: [],
@@ -16,13 +16,13 @@ export const processingAnnouncements = async ({ domain, year }) => {
 		const browser = await puppeteer.launch()
 		const page = await browser.newPage()
 
-		await page.goto(domain)
+		await page.goto(params.url)
 
 		const popularCategories = await page.evaluate(getPopularCategories)
 
 		await page.close()
 
-		const promises = popularCategories.map(category => processAnnouncementsFromCategory({ category, domain, browser }))
+		const promises = [popularCategories[0]].map(category => processAnnouncementsFromCategory({ category, domain, browser }))
 		const processedCategories = await Promise.allSettled(promises)
 
 		await browser.close()
@@ -185,6 +185,9 @@ async function processAnnouncementsFromCategory ({ category, domain, browser }) 
 			return true
 		})
 		await page.waitForSelector('.searchForms')
+
+		const brandModels = await page.evaluate(getNameModels)
+
 		await page.evaluate(goToCaеegoryPage, category)
 		await wittingForSelectors(page)
 
@@ -236,6 +239,3 @@ async function processAnnouncementsFromCategory ({ category, domain, browser }) 
 			console.error('An error occurred:', e)
 	}
 }
-
-
-

@@ -1,23 +1,22 @@
 import { processingAnnouncements, getProcessedAnnouncements } from '../services/announcements.service.js'
-import { isValidUrl } from '../../helpers/helper.js'
+import { isValidUrl } from '../helpers/helper.js'
 
-export const list = (request, _response) => {
-	return getProcessedAnnouncements
-}
+
 
 export const proceed = async (request, response) => {
-	const { domain, year } = request.body
+	const params = Object.fromEntries(Object.entries(request.body))
+	const valueInRedis = await fastify.redis.get('popularCategories')
 
 	try {
-		if (!isValidUrl(domain)) {
+		if (!isValidUrl(params.url)) {
 			throw new Error('Invalid domain')
 		}
 
-		if (!year || typeof year !== 'number') {
+		if (!params.productionYearFrom) {
 			console.log("Invalid the parameter year. It'll be set to the -> 2017.")
 		}
 
-		const processedAnnouncements = await processingAnnouncements({ domain, year })
+		const processedAnnouncements = await processingAnnouncements(params)
 
 		response.status(201)
 

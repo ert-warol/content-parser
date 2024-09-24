@@ -5,11 +5,13 @@ import fastifySwagger from '@fastify/swagger'
 // import FastifySession from '@fastify/session'
 import AdminJSFastify from '@adminjs/fastify'
 import fastifyStatic from '@fastify/static'
+// import fastifyRedis from '@fastify/redis'
 import AdminJS, { DefaultAuthProvider } from 'adminjs'
 import * as AdminJSSequelize from '@adminjs/sequelize'
 // import Connect from 'connect-pg-simple'
 import 'dotenv/config'
-import route from './api/http/routes/announcements.route.js'
+import routeAnnouncements from './api/http/routes/announcements.route.js'
+import routeOptions from './api/http/routes/options.route.js'
 import { option } from './api/admin-js/options/options.js'
 import path from 'node:path'
 import { fileURLToPath } from 'url'
@@ -45,7 +47,7 @@ AdminJS.registerAdapter({
 // }
 const start = async () => {
 	const app = Fastify({
-		logger: process.env.NODE_ENV === 'production' ? { level: 'error' } : true,
+		logger: true,
 		trustProxy: true
 	})
 	const port = process.env.PORT || 8080
@@ -112,7 +114,13 @@ const start = async () => {
 		root: path.join(__dirname, 'public/style'),
 		prefix: '/public',
 	})
-	app.register(route)
+	// app.register(fastifyRedis, {
+	// 	host: '127.0.0.1', // Redis server host
+	// 	port: 6379,        // Redis server port
+	// 	password: process.env.SECRET_KEY, // Optional, if your Redis server requires a password
+	// })
+	app.register(routeAnnouncements)
+	app.register(routeOptions)
 
 	app.get('/', () => {
 		return { name: 'Automobile crawler API' }

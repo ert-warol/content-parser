@@ -126,7 +126,7 @@ const ContentParser = () => {
 					</div>
 
 				</div>
-				<button type="submit">Submit</button>
+				<button type="submit">Run parser</button>
 			</form>
 		</div>
 	)
