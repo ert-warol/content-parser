@@ -1,6 +1,14 @@
 import OptionSite from '../helpers/OptionSite.js'
 import OptionDb from '../helpers/OptionDb.js'
 
+export async function getBrandsAndModels (option) {
+	const optionList = await OptionDb.get(option)
+
+	return {
+		options: optionList.options
+	}
+}
+
 export async function processingSelects (data) {
 	const dataObj = {
 		item: [],

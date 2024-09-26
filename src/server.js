@@ -1,5 +1,6 @@
 import Fastify from 'fastify'
 import fastifyCors from '@fastify/cors'
+// import fastifyCookie from '@fastify/cookie'
 // import fastifyHelmet from '@fastify/helmet'
 import fastifySwagger from '@fastify/swagger'
 // import FastifySession from '@fastify/session'
@@ -11,7 +12,7 @@ import * as AdminJSSequelize from '@adminjs/sequelize'
 // import Connect from 'connect-pg-simple'
 import 'dotenv/config'
 import routeAnnouncements from './api/http/routes/announcements.route.js'
-import routeOptions from './api/http/routes/options.route.js'
+import routeOptions from './api/http/routes/brands.models.route.js'
 import { option } from './api/admin-js/options/options.js'
 import path from 'node:path'
 import { fileURLToPath } from 'url'
@@ -111,8 +112,8 @@ const start = async () => {
 		hideUntagged: true
 	})
 	app.register(fastifyStatic, {
-		root: path.join(__dirname, 'public/style'),
-		prefix: '/public',
+		root: path.join(__dirname, 'public'),
+		prefix: '/public/',
 	})
 	// app.register(fastifyRedis, {
 	// 	host: '127.0.0.1', // Redis server host

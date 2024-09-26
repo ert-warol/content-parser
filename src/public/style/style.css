@@ -1,10 +1,14 @@
 /* styles.css */
-.custom-page {
-    display: block;
+#settings-page,
+.custom-page{
     margin: 0 auto;
-    max-width: max-content;
     background-color: #e0f7e0; /* Light green background */
     padding: 20px;
+}
+
+.custom-page {
+    display: block;
+    max-width: max-content;
     border-radius: 10px;
     font-family: Arial, sans-serif;
 }

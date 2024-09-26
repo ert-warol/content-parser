@@ -14,7 +14,10 @@ export const option = {
 			component: Components.ContentParserPage,
 			label: 'Content parser',
 		},
-		settings: 'Settings (demo)',
+		settings: {
+			component: Components.SettingsPage,
+			label: 'Settings (demo)',
+		},
 	},
 	componentLoader,
 	resources: [

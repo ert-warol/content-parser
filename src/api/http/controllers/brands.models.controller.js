@@ -1,7 +1,17 @@
 // import { isValidUrl, checkExistBrand } from '../../helpers/helper.js'
-import { processingSelects, processingAllSelects } from '../services/options.service.js'
+import { processingSelects, processingAllSelects, getBrandsAndModels } from '../services/brands.models.service.js'
 
-export const upsertOptions = async (request, response) => {
+export const get = async (request, _response) => {
+	try {
+		return await getBrandsAndModels(request.query.option)
+	} catch (e) {
+		return {
+			error: e.message
+		}
+	}
+}
+
+export const upsert = async (request, response) => {
 	try {
 		const processedSelect = await processingSelects({ option: request.body.option, value: request.body.value})
 
@@ -15,7 +25,7 @@ export const upsertOptions = async (request, response) => {
 	}
 }
 
-export const createOptions = async (_request, response) => {
+export const create = async (_request, response) => {
 	try {
 		const processedSelect = await processingAllSelects()
 
