@@ -63,7 +63,6 @@ module.exports = {
       }
     })
   },
-
   async down (queryInterface, _Sequelize) {
     await queryInterface.dropTable('announcements')
   }

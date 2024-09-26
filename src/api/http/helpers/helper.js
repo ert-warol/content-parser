@@ -1,6 +1,9 @@
 import puppeteer from 'puppeteer'
 
-async function getMainCategories (data)  {
+import Announcements from '../models/announcements.model.js'
+import Options from '../models/options.model.js'
+
+async function getMainCategories (data){
 
 }
 
