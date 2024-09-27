@@ -24,12 +24,13 @@ const CustomTitle = props => {
     e.stopPropagation()
     window.open(props.record.params.link, '_blank')
   }
+
   return (
     <TitleWrapper id="custom-link">
       <h3>{props.record.params.title}</h3>
       <LinkWrapper onClick={onLinkClick}>
-        <span>See announcement to https://</span>
-        <span>www.mobile.bg</span>
+        <span>See announcement to </span>
+        <span>https://www.mobile.bg</span>
       </LinkWrapper>
     </TitleWrapper>
   )
