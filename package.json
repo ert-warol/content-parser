@@ -9,9 +9,9 @@
   "private": true,
   "scripts": {
     "start": "node src/server.js",
-    "start:pm2": "pm2 start src/server.js -- --port 8080 --name content_parser",
-    "start:stage:pm2": "pm2 start src/server.js --name content_parser",
-    "restart:stage:pm2": "pm2 restart content_parser",
+    "start:dev": "pm2 start src/server.js -- --port 8080 --name content_parser",
+    "start:stage": "pm2 start src/server.js -- --port 3071 --name content_parser",
+    "restart:stage": "pm2 restart content_parser",
     "stop:pm2": "pm2 stop content_parser",
     "dev": "nodemon src/server.js",
     "lint": "eslint . --ext .js",
