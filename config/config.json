@@ -7,9 +7,9 @@
     "dialect": "postgres"
   },
   "stage": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
+    "username": "mobile",
+    "password": "KP66sNshp9Y7",
+    "database": "mobile",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },

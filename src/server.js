@@ -51,7 +51,7 @@ const start = async () => {
 		logger: true,
 		trustProxy: true
 	})
-	const port = process.env.PORT || 8080
+	const port = process.env.PORT
 	// const cookieSecret = process.env.SECRET_KEY
 	const admin = new AdminJS(option)
 	// const cookieSecret = 'sieL67H7GbkzJ4XCoH0IHcmO1hGBSiG5'

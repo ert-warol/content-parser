@@ -78,8 +78,6 @@ const ContentParser = () => {
 			.then(response => response.json())
 			.then(data => {
 				setBrands(data.options)
-
-				console.log('data.options -> ', data.options)
 			})
 			.catch(error => {
 				console.error('Error fetching brands:', error)
