@@ -94,7 +94,7 @@ class OptionSite extends Option {
 					return modelNames
 				}
 
-				modelNames.push(item.innerHTML)
+				modelNames.push(item.innerHTML.replace(/&nbsp;/g, ''))
 
 				return modelNames
 			}, [])

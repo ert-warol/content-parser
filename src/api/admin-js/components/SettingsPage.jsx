@@ -6,7 +6,7 @@ const SettingsPage = (props) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await fetch('http://localhost:8080/options/create', {
+			const response = await fetch('http://localhost:8080/brand/models/create', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
