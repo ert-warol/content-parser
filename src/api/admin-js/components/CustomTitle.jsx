@@ -14,7 +14,7 @@ const CustomTitle = (props) => {
 					'border-radius': '5px',
 					'text-align': 'center',
 				}}>
-					<span>See announcement to https:</span>
+					<span>See announcement to https:</span><br/>
 					<span>www.mobile.bg</span>
 				</div>
 			</a>
