@@ -1,4 +1,8 @@
 /* styles.css */
+:root {
+  --base-color: #2e7d32;
+}
+
 #settings-page,
 .custom-page {
   margin: 0 auto;
@@ -8,50 +12,49 @@
 
 .custom-page {
   display: block;
-  max-width: max-content;
+  width: min(400px, 85%);
   border-radius: 10px;
   font-family: Arial, sans-serif;
 }
 
 .custom-page h1 {
   font-weight: 600;
-  color: #2e7d32; /* Dark green color for the heading */
+  color: var(--base-color); /* Dark green color for the heading */
+}
+
+.parser-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  margin: 0 0 10px 0;
-}
-
-.form-group label {
-  display: block;
-  margin: 0 0 5px 0;
-  color: #2e7d32; /* Dark green color for labels */
+  gap: 5px;
+  color: var(--base-color); /* Dark green color for labels */
   font-size: 1em;
 }
 
 .form-group select,
-.form-group input[type='number'] {
+.form-group input {
   padding: 10px;
-  border: 1px solid #2e7d32; /* Dark green border */
+  border: 1px solid var(--base-color); /* Dark green border */
   border-radius: 5px;
   background-color: #ffffff; /* White background for inputs */
-  color: #2e7d32; /* Dark green text color */
+  color: black;
 }
 
-.form-group input[type='number'] {
-  width: auto;
-}
-
-.form-group .error {
+.error-message {
   color: #d32f2f; /* Red color for error messages */
-  font-size: 0.9em;
-  margin-top: 5px;
+  font-size: 0.85em;
+  font-weight: 500;
 }
 
 button[type='submit'] {
-  background-color: #2e7d32; /* Dark green background for the button */
+  background-color: var(
+    --base-color
+  ); /* Dark green background for the button */
   color: #ffffff; /* White text color */
   padding: 10px 20px;
   border: none;
@@ -63,16 +66,16 @@ button[type='submit']:hover {
   background-color: #1b5e20; /* Darker green on hover */
 }
 
-select,
-input {
-  margin: 0 0 5px 0;
-}
-
 .interval {
   display: flex;
   flex-direction: column;
 }
 
 .lds-facebook div {
-  background-color: #2e7d32 !important;
+  background-color: var(--base-color) !important;
+}
+
+.form-group p {
+  display: flex;
+  gap: 10px;
 }
