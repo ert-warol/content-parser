@@ -14,6 +14,8 @@ const ContentParser = () => {
   const [priceTo, setPriceTo] = useState('')
   const [errors, setErrors] = useState({})
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleSubmit = async event => {
     event.preventDefault()
     const data = {
@@ -28,13 +30,10 @@ const ContentParser = () => {
 
     try {
       await startParsing(data, {
+        onRequest: () => setIsLoading(true),
+        onFinally: () => setIsLoading(false),
         onSuccess: res => {
           console.log(res)
-          // if (response.ok) {
-          //   console.log('Data submitted successfully')
-          // } else {
-          //   console.error('Failed to submit data')
-          // }
         },
       })
     } catch (error) {
@@ -164,6 +163,7 @@ const ContentParser = () => {
           </div>
         </div>
         <button type="submit">Run parser</button>
+        {isLoading && <Loader />}
       </form>
     </div>
   )
