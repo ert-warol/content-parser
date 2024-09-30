@@ -1,4 +1,4 @@
-import { componentLoader, Components } from '../components.js'
+import { componentLoader, Components, Pages } from '../components.js'
 import Announcements from '../../http/models/announcements.model.js'
 
 export const option = {
@@ -11,11 +11,11 @@ export const option = {
   },
   pages: {
     contentParser: {
-      component: Components.ContentParserPage,
+      component: Pages.ContentParserPage,
       label: 'Content parser',
     },
     settings: {
-      component: Components.SettingsPage,
+      component: Pages.SettingsPage,
       label: 'Settings (demo)',
     },
   },

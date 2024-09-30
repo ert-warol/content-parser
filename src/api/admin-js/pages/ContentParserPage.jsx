@@ -1,50 +1,23 @@
 import React, { useState, useEffect } from 'react'
-// import './style/style.css'
-// import styles from './style/style.css'
+import { getModelsByOption, startParsing } from '../services/api-service'
 
-const categories = [
-  'Mercedes-Benz',
-  'BMW',
-  'Audi',
-  'VW',
-  'Toyota',
-  'Opel',
-  'Peugeot',
-]
-const typeTransmission = {
-  manual: 'Ръчна',
-  automatic: 'Автоматична',
-  semi_automatic: 'Полуавтоматична',
-}
-
+const URL = 'https://www.mobile.bg'
+const DEFAULT_YEAR = 2017
 const ContentParser = () => {
   const [brands, setBrands] = useState([])
   const [models, setModels] = useState([])
   const [selectedBrand, setSelectedBrand] = useState('')
   const [selectedModel, setSelectedModel] = useState('')
-  const [url, setUrl] = useState('https://www.mobile.bg')
-  const [productionYearFrom, setProductionYearFrom] = useState('2017')
+  const [productionYearFrom, setProductionYearFrom] = useState(DEFAULT_YEAR)
   const [productionYearTo, setProductionYearTo] = useState('')
   const [priceFrom, setPriceFrom] = useState('')
   const [priceTo, setPriceTo] = useState('')
   const [errors, setErrors] = useState({})
-  // const validate = () => {
-  // 	const newErrors = {}
-  // 	if (!selectedCategory) newErrors.selectedBrand = 'Category is required'
-  //
-  // 	return newErrors
-  // }
-  const handleSubmit = async event => {
-    console.log('event -> ', event)
 
+  const handleSubmit = async event => {
     event.preventDefault()
-    // const newErrors = validate()
-    // if (Object.keys(newErrors).length > 0) {
-    // 	setErrors(newErrors)
-    // 	return
-    // }
     const data = {
-      url,
+      url: URL,
       selectedBrand,
       selectedModel,
       productionYearFrom,
@@ -54,22 +27,16 @@ const ContentParser = () => {
     }
 
     try {
-      const response = await fetch(
-        'http://localhost:8080/announcements/parsingContentByParams',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
+      await startParsing(data, {
+        onSuccess: res => {
+          console.log(res)
+          // if (response.ok) {
+          //   console.log('Data submitted successfully')
+          // } else {
+          //   console.error('Failed to submit data')
+          // }
         },
-      )
-
-      if (response.ok) {
-        console.log('Data submitted successfully')
-      } else {
-        console.error('Failed to submit data')
-      }
+      })
     } catch (error) {
       console.error('Error:', error)
     }
@@ -77,31 +44,23 @@ const ContentParser = () => {
 
   // Fetch brands on component mount
   useEffect(() => {
-    fetch('/brand/models/options?option=brands')
-      .then(response => response.json())
-      .then(data => {
-        setBrands(data.options)
-
-        console.log('data.options -> ', data.options)
-      })
-      .catch(error => {
-        console.error('Error fetching brands:', error)
-      })
+    getModelsByOption('brands', {
+      onSuccess: res => {
+        console.log('brands response -> ', res)
+        setBrands(res?.options || [])
+      },
+    }).catch(e => console.error('Error fetching brands:', e))
   }, [])
 
   // Fetch models when a brand is selected
   useEffect(() => {
     if (selectedBrand) {
-      fetch(`/brand/models/options?option=${selectedBrand}`)
-        .then(response => response.json())
-        .then(data => {
-          setModels(data.options)
-
-          console.log('data.options -> ', data.options)
-        })
-        .catch(error => {
-          console.error('Error fetching models:', error)
-        })
+      getModelsByOption(selectedBrand, {
+        onSuccess: res => {
+          console.log('Models response -> ', res)
+          setModels(res?.options || [])
+        },
+      }).catch(e => console.error('Error fetching models:', e))
     }
   }, [selectedBrand])
 
@@ -147,7 +106,7 @@ const ContentParser = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Production Years (by default is 2017):</label>
+          <label>Production Years (by default is {DEFAULT_YEAR}):</label>
           <select
             value={productionYearFrom}
             onChange={e => setProductionYearFrom(e.target.value)}
@@ -182,7 +141,7 @@ const ContentParser = () => {
         </div>
         <div
           className="form-group price-interval"
-          style={{ 'margin-bottom': '15px' }}
+          style={{ marginBottom: '15px' }}
         >
           <label>Price:</label>
           <div className="interval">
@@ -210,7 +169,7 @@ const ContentParser = () => {
   )
 }
 
-function yearsFromAnyToCurrent(startYear = 2017) {
+function yearsFromAnyToCurrent(startYear = DEFAULT_YEAR) {
   const currentYear = new Date().getFullYear()
   const years = []
 

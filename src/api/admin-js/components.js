@@ -1,12 +1,15 @@
 import { ComponentLoader } from 'adminjs'
 
-const componentLoader = new ComponentLoader()
+export const componentLoader = new ComponentLoader()
 
-const Components = {
-	CustomImage: componentLoader.add('CustomImage', './components/CustomImage.jsx'),
-	CustomTitle: componentLoader.add('CustomTitle', './components/CustomTitle.jsx'),
-	ContentParserPage: componentLoader.add('ContentParserPage', './components/ContentParser.jsx'),
-	SettingsPage: componentLoader.add('SettingsPage', './components/SettingsPage.jsx'),
+const add = (...args) => componentLoader.add(...args)
+
+export const Components = {
+  CustomImage: add('CustomImage', './components/CustomImage.jsx'),
+  CustomTitle: add('CustomTitle', './components/CustomTitle.jsx'),
 }
 
-export { componentLoader, Components }
+export const Pages = {
+  ContentParserPage: add('ContentParserPage', './pages/ContentParserPage.jsx'),
+  SettingsPage: add('SettingsPage', './pages/SettingsPage.jsx'),
+}
