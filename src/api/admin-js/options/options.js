@@ -1,18 +1,21 @@
 import { componentLoader, Components, Pages } from '../components.js'
 import Announcements from '../../http/models/announcements.model.js'
+import locale from '../locale/index.js'
 
 export const option = {
   assets: {
     styles: ['/public/style/style.css'],
   },
-  locale: {
-    language: 'en', // default language
-    availableLanguages: ['en', 'Bulgarian'], // array of available languages
-  },
+  locale,
   pages: {
     contentParser: {
       component: Pages.ContentParserPage,
       label: 'Content parser',
+      handler: async () => {
+        return {
+          text: 'I am fetched from the backend',
+        }
+      },
     },
     settings: {
       component: Pages.SettingsPage,

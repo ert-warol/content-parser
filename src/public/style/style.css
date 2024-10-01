@@ -79,7 +79,3 @@ button[type='submit']:hover {
   display: flex;
   gap: 10px;
 }
-
-.form-group p span {
-  flex-shrink: 0;
-}

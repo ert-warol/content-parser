@@ -1,0 +1,11 @@
+{
+  "labels": {
+    "announcements": "Announcements",
+    "127.0.0.1": "127.0.0.1"
+  },
+  "pages": {
+    "contentParser": "Content parser",
+    "settings": "Settings"
+  },
+  "components.LanguageSelector.availableLanguages.bg": "Български"
+}

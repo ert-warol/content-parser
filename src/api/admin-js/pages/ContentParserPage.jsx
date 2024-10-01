@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useNotice, ApiClient } from 'adminjs'
 import { Loader } from '@adminjs/design-system'
 
 import { getModelsByOption, startParsing } from '../services/api-service'
 import { URL, DEFAULT_YEAR, parserValidationSchema } from '../helpers'
+
+// const api = new ApiClient()
 
 const ContentParser = () => {
   const [brands, setBrands] = useState([])
   const [selectedBrand, setSelectedBrand] = useState('')
   const [models, setModels] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+
+  const addNotice = useNotice()
 
   const initialFormValues = {
     selectedBrand: '',
@@ -31,6 +36,10 @@ const ContentParser = () => {
         onRequest: () => setIsLoading(true),
         onFinally: () => setIsLoading(false),
         onSuccess: res => {
+          addNotice({
+            message: 'Parsing successful',
+            type: 'success',
+          })
           console.log(res)
         },
       })
@@ -60,6 +69,12 @@ const ContentParser = () => {
       }).catch(e => console.error('Error fetching models:', e))
     }
   }, [selectedBrand])
+
+  // useEffect(() => {
+  //   api.getPage({ pageName: 'contentParser' }).then(res => {
+  //     console.log('res', res)
+  //   })
+  // }, [])
 
   return (
     <div className="custom-page">
@@ -186,7 +201,9 @@ const ContentParser = () => {
                 <Field name="priceTo" placeholder="To" />
               </div>
 
-              <button type="submit">Run parser</button>
+              <button type="submit" disabled={isLoading}>
+                Run parser
+              </button>
 
               {isLoading && <Loader />}
             </Form>
