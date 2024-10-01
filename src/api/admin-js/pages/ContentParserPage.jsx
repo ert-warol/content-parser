@@ -85,7 +85,7 @@ const ContentParser = () => {
         validationSchema={parserValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue }) => {
+        {({ setFieldValue, values }) => {
           return (
             <Form className="parser-form">
               <div className="form-group">
@@ -101,6 +101,7 @@ const ContentParser = () => {
                 <Field
                   as="select"
                   name="selectedBrand"
+                  className={!values.selectedBrand && 'text-gray'}
                   onChange={e => {
                     const value = e.target.value
                     setSelectedBrand(value)
@@ -131,6 +132,7 @@ const ContentParser = () => {
                   disabled={models.length === 0}
                   as="select"
                   name="selectedModel"
+                  className={!values.selectedModel && 'text-gray'}
                 >
                   <option disabled hidden value="">
                     {models.length === 0
@@ -162,9 +164,13 @@ const ContentParser = () => {
                   ))}
                 </Field>
 
-                <Field as="select" name="productionYearTo">
+                <Field
+                  as="select"
+                  name="productionYearTo"
+                  className={!values.productionYearTo && 'text-gray'}
+                >
                   <option disabled hidden value="">
-                    Select 'to' year
+                    To
                   </option>
                   {yearsFromAnyToCurrent().map(year => (
                     <option key={year} value={year}>
