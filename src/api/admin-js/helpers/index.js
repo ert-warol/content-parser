@@ -25,13 +25,15 @@ export const parserValidationSchema = Yup.object()
     ) {
       return actions.createError({
         path: 'productionYearFrom',
-        message: "The value must be less than 'To' year",
+        message:
+          "The 'From' value must be less than or equal to the 'To' value",
       })
     }
     if (priceFrom && priceTo && +priceFrom > +priceTo) {
       return actions.createError({
         path: 'priceFrom',
-        message: "The value must be less than 'To' price",
+        message:
+          "The 'From' value must be less than or equal to the 'To' value",
       })
     }
     return true

@@ -112,9 +112,15 @@ const ContentParser = () => {
                     className="error-message"
                   />
                 </p>
-                <Field as="select" name="selectedModel">
+                <Field
+                  disabled={models.length === 0}
+                  as="select"
+                  name="selectedModel"
+                >
                   <option disabled hidden value="">
-                    Select a model
+                    {models.length === 0
+                      ? 'First choose a brand'
+                      : 'Select a model'}
                   </option>
                   {models.map(model => (
                     <option key={model} value={model}>
