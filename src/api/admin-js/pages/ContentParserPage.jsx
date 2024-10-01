@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { useNotice, ApiClient } from 'adminjs'
 import { Loader } from '@adminjs/design-system'
 
 import { getModelsByOption, startParsing } from '../services/api-service'
 import { URL, DEFAULT_YEAR, parserValidationSchema } from '../helpers'
+
+// const api = new ApiClient()
 
 const ContentParser = () => {
   const [brands, setBrands] = useState([])
   const [selectedBrand, setSelectedBrand] = useState('')
   const [models, setModels] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+
+  const addNotice = useNotice()
 
   const initialFormValues = {
     selectedBrand: '',
@@ -31,6 +36,10 @@ const ContentParser = () => {
         onRequest: () => setIsLoading(true),
         onFinally: () => setIsLoading(false),
         onSuccess: res => {
+          addNotice({
+            message: 'Parsing successful',
+            type: 'success',
+          })
           console.log(res)
         },
       })
@@ -61,6 +70,12 @@ const ContentParser = () => {
     }
   }, [selectedBrand])
 
+  // useEffect(() => {
+  //   api.getPage({ pageName: 'contentParser' }).then(res => {
+  //     console.log('res', res)
+  //   })
+  // }, [])
+
   return (
     <div className="custom-page">
       <h1 style={{ marginBottom: '20px' }}>Parser form</h1>
@@ -70,7 +85,7 @@ const ContentParser = () => {
         validationSchema={parserValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue }) => {
+        {({ setFieldValue, values }) => {
           return (
             <Form className="parser-form">
               <div className="form-group">
@@ -86,6 +101,7 @@ const ContentParser = () => {
                 <Field
                   as="select"
                   name="selectedBrand"
+                  className={!values.selectedBrand && 'text-gray'}
                   onChange={e => {
                     const value = e.target.value
                     setSelectedBrand(value)
@@ -116,6 +132,7 @@ const ContentParser = () => {
                   disabled={models.length === 0}
                   as="select"
                   name="selectedModel"
+                  className={!values.selectedModel && 'text-gray'}
                 >
                   <option disabled hidden value="">
                     {models.length === 0
@@ -147,9 +164,13 @@ const ContentParser = () => {
                   ))}
                 </Field>
 
-                <Field as="select" name="productionYearTo">
+                <Field
+                  as="select"
+                  name="productionYearTo"
+                  className={!values.productionYearTo && 'text-gray'}
+                >
                   <option disabled hidden value="">
-                    Select 'to' year
+                    To
                   </option>
                   {yearsFromAnyToCurrent().map(year => (
                     <option key={year} value={year}>
@@ -186,7 +207,9 @@ const ContentParser = () => {
                 <Field name="priceTo" placeholder="To" />
               </div>
 
-              <button type="submit">Run parser</button>
+              <button type="submit" disabled={isLoading}>
+                Run parser
+              </button>
 
               {isLoading && <Loader />}
             </Form>
