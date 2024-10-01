@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { useNotice, ApiClient } from 'adminjs'
-import { Loader } from '@adminjs/design-system'
+import { useNotice } from 'adminjs'
+import { Loader, Icon } from '@adminjs/design-system'
 
 import { getModelsByOption, startParsing } from '../services/api-service'
 import { URL, DEFAULT_YEAR, parserValidationSchema } from '../helpers'
 
-// const api = new ApiClient()
+const currencies = ['USD', 'EUR', 'лв.']
 
 const ContentParser = () => {
   const [brands, setBrands] = useState([])
@@ -19,10 +19,11 @@ const ContentParser = () => {
   const initialFormValues = {
     selectedBrand: '',
     selectedModel: '',
-    productionYearFrom: DEFAULT_YEAR,
+    productionYearFrom: '',
     productionYearTo: '',
     priceFrom: '',
     priceTo: '',
+    currency: '',
   }
 
   const handleSubmit = async values => {
@@ -70,12 +71,6 @@ const ContentParser = () => {
     }
   }, [selectedBrand])
 
-  // useEffect(() => {
-  //   api.getPage({ pageName: 'contentParser' }).then(res => {
-  //     console.log('res', res)
-  //   })
-  // }, [])
-
   return (
     <div className="custom-page">
       <h1 style={{ marginBottom: '20px' }}>Parser form</h1>
@@ -87,9 +82,11 @@ const ContentParser = () => {
       >
         {({ setFieldValue, values }) => {
           return (
-            <Form className="parser-form">
-              <div className="form-group">
-                <p>
+            <Form className="flex direction-column gap-20">
+              {/****************** Brand select input ****************/}
+
+              <div className="flex direction-column gap-5">
+                <p className="custom-label">
                   <span>*Brand:</span>
                   <ErrorMessage
                     name="selectedBrand"
@@ -101,7 +98,10 @@ const ContentParser = () => {
                 <Field
                   as="select"
                   name="selectedBrand"
-                  className={!values.selectedBrand && 'text-gray'}
+                  className={[
+                    !values.selectedBrand ? 'text-gray' : '',
+                    'custom-field',
+                  ].join(' ')}
                   onChange={e => {
                     const value = e.target.value
                     setSelectedBrand(value)
@@ -119,8 +119,10 @@ const ContentParser = () => {
                 </Field>
               </div>
 
-              <div className="form-group">
-                <p>
+              {/****************** Model select input ****************/}
+
+              <div className="flex direction-column gap-5">
+                <p className="custom-label">
                   <span>*Model:</span>
                   <ErrorMessage
                     name="selectedModel"
@@ -128,11 +130,15 @@ const ContentParser = () => {
                     className="error-message"
                   />
                 </p>
+
                 <Field
                   disabled={models.length === 0}
                   as="select"
                   name="selectedModel"
-                  className={!values.selectedModel && 'text-gray'}
+                  className={[
+                    !values.selectedModel ? 'text-gray' : '',
+                    'custom-field',
+                  ].join(' ')}
                 >
                   <option disabled hidden value="">
                     {models.length === 0
@@ -147,8 +153,10 @@ const ContentParser = () => {
                 </Field>
               </div>
 
-              <div className="form-group">
-                <p>
+              {/****************** Year select inputs ****************/}
+
+              <div className="flex direction-column gap-5">
+                <p className="custom-label">
                   <span>Production years:</span>
                   <ErrorMessage
                     name="productionYearFrom"
@@ -156,40 +164,72 @@ const ContentParser = () => {
                     className="error-message"
                   />
                 </p>
-                <Field as="select" name="productionYearFrom">
-                  {yearsFromAnyToCurrent().map(year => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </Field>
+                <div className="flex gap-5">
+                  <div className="parser-form-select flex-1">
+                    <Field
+                      as="select"
+                      name="productionYearFrom"
+                      className={[
+                        !values.productionYearFrom ? 'text-gray' : '',
+                        'custom-field',
+                      ].join(' ')}
+                    >
+                      <option disabled hidden value="">
+                        From
+                      </option>
+                      {yearsFromAnyToCurrent().map(year => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </Field>
+                    {values.productionYearFrom && (
+                      <Icon
+                        icon="X"
+                        size={14}
+                        className="select-icon"
+                        onClick={() => setFieldValue('productionYearFrom', '')}
+                      />
+                    )}
+                  </div>
 
-                <Field
-                  as="select"
-                  name="productionYearTo"
-                  className={!values.productionYearTo && 'text-gray'}
-                >
-                  <option disabled hidden value="">
-                    To
-                  </option>
-                  {yearsFromAnyToCurrent().map(year => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage
-                  name="productionYearTo"
-                  component="span"
-                  className="error-message"
-                />
+                  <div className="parser-form-select flex-1">
+                    <Field
+                      as="select"
+                      name="productionYearTo"
+                      className={[
+                        !values.productionYearTo ? 'text-gray' : '',
+                        'custom-field',
+                      ].join(' ')}
+                    >
+                      <option disabled hidden value="">
+                        To
+                      </option>
+                      {yearsFromAnyToCurrent().map(year => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </Field>
+                    {values.productionYearTo && (
+                      <Icon
+                        icon="X"
+                        size={14}
+                        className="select-icon"
+                        onClick={() => setFieldValue('productionYearTo', '')}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
 
+              {/****************** Price inputs ****************/}
+
               <div
-                className="form-group price-interval"
+                className="flex direction-column gap-5"
                 style={{ marginBottom: '15px' }}
               >
-                <p>
+                <p className="custom-label">
                   <span>Price:</span>
                   <ErrorMessage
                     name="priceFrom"
@@ -197,14 +237,36 @@ const ContentParser = () => {
                     className="error-message"
                   />
                 </p>
-                <Field name="priceFrom" placeholder="From" />
-
-                <ErrorMessage
-                  name="priceTo"
-                  component="span"
-                  className="error-message"
-                />
-                <Field name="priceTo" placeholder="To" />
+                <div className="flex gap-5 wrap">
+                  <Field
+                    as="select"
+                    name="currency"
+                    className={[
+                      !values.currency ? 'text-gray' : '',
+                      'custom-field',
+                    ].join(' ')}
+                  >
+                    <option disabled hidden value="">
+                      Curr.
+                    </option>
+                    <option value="">All</option>
+                    {currencies.map(с => (
+                      <option key={с} value={с}>
+                        {с}
+                      </option>
+                    ))}
+                  </Field>
+                  <Field
+                    name="priceFrom"
+                    placeholder="From"
+                    className="custom-field flex-1"
+                  />
+                  <Field
+                    name="priceTo"
+                    placeholder="To"
+                    className="custom-field flex-1"
+                  />
+                </div>
               </div>
 
               <button type="submit" disabled={isLoading}>

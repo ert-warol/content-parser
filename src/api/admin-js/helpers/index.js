@@ -7,7 +7,7 @@ export const parserValidationSchema = Yup.object()
   .shape({
     selectedBrand: Yup.string().required('Required'),
     selectedModel: Yup.string().required('Required'),
-    productionYearFrom: Yup.string().required('Required'),
+    productionYearFrom: Yup.string(),
     productionYearTo: Yup.string(),
     priceFrom: Yup.number('Invalid value')
       .positive('Invalid value')

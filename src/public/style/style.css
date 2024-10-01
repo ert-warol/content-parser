@@ -1,12 +1,12 @@
 /* styles.css */
 :root {
-  --base-color: #2e7d32;
+  --primary-color: #2e7d32;
 }
 
 #settings-page,
 .custom-page {
   margin: 0 auto;
-  background-color: #e0f7e0; /* Light green background */
+  background-color: #e0f7e0;
   padding: 20px;
 }
 
@@ -19,7 +19,7 @@
 
 .custom-page h1 {
   font-weight: 600;
-  color: var(--base-color); /* Dark green color for the heading */
+  color: var(--primary-color);
 }
 
 .parser-form {
@@ -28,33 +28,32 @@
   gap: 20px;
 }
 
-.form-group {
-  display: flex;
+.direction-column {
   flex-direction: column;
-  gap: 5px;
-  color: var(--base-color); /* Dark green color for labels */
-  font-size: 1em;
 }
 
-.form-group select,
-.form-group input {
+.custom-field {
   padding: 10px;
-  border: 1px solid var(--base-color); /* Dark green border */
+  border: 1px solid var(--primary-color);
   border-radius: 5px;
-  background-color: #ffffff; /* White background for inputs */
+  background-color: #ffffff;
+}
+
+.custom-label {
+  display: flex;
+  gap: 10px;
+  color: var(--primary-color);
 }
 
 .error-message {
-  color: #d32f2f; /* Red color for error messages */
-  font-size: 0.85em;
+  color: #d32f2f;
   font-weight: 500;
+  font-size: 0.85em;
 }
 
 button[type='submit'] {
-  background-color: var(
-    --base-color
-  ); /* Dark green background for the button */
-  color: #ffffff; /* White text color */
+  background-color: var(--primary-color);
+  color: #ffffff;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -62,23 +61,53 @@ button[type='submit'] {
 }
 
 button[type='submit']:hover {
-  background-color: #1b5e20; /* Darker green on hover */
-}
-
-.interval {
-  display: flex;
-  flex-direction: column;
+  background-color: #1b5e20;
 }
 
 .lds-facebook div {
-  background-color: var(--base-color) !important;
-}
-
-.form-group p {
-  display: flex;
-  gap: 10px;
+  background-color: var(--primary-color) !important;
 }
 
 .text-gray {
   color: gray;
+}
+
+.parser-form-select {
+  position: relative;
+}
+
+.parser-form-select .custom-field {
+  width: 100%;
+}
+
+.parser-form-select .select-icon {
+  position: absolute;
+  top: 30%;
+  right: 24px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+}
+
+.gap-5 {
+  gap: 5px;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.gap-20 {
+  gap: 20px;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.wrap {
+  flex-wrap: wrap;
 }
