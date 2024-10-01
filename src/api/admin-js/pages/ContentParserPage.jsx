@@ -1,40 +1,37 @@
 import React, { useState, useEffect } from 'react'
-import { getModelsByOption, startParsing } from '../services/api-service'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Loader } from '@adminjs/design-system'
 
-const URL = 'https://www.mobile.bg'
-const DEFAULT_YEAR = 2017
+import { getModelsByOption, startParsing } from '../services/api-service'
+import { URL, DEFAULT_YEAR, parserValidationSchema } from '../helpers'
+
 const ContentParser = () => {
   const [brands, setBrands] = useState([])
-  const [models, setModels] = useState([])
   const [selectedBrand, setSelectedBrand] = useState('')
-  const [selectedModel, setSelectedModel] = useState('')
-  const [productionYearFrom, setProductionYearFrom] = useState(DEFAULT_YEAR)
-  const [productionYearTo, setProductionYearTo] = useState('')
-  const [priceFrom, setPriceFrom] = useState('')
-  const [priceTo, setPriceTo] = useState('')
-  const [errors, setErrors] = useState({})
+  const [models, setModels] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async event => {
-    event.preventDefault()
+  const initialFormValues = {
+    selectedBrand: '',
+    selectedModel: '',
+    productionYearFrom: DEFAULT_YEAR,
+    productionYearTo: '',
+    priceFrom: '',
+    priceTo: '',
+  }
+
+  const handleSubmit = async values => {
     const data = {
       url: URL,
-      selectedBrand,
-      selectedModel,
-      productionYearFrom,
-      productionYearTo,
-      priceFrom,
-      priceTo,
+      ...values,
     }
 
     try {
       await startParsing(data, {
+        onRequest: () => setIsLoading(true),
+        onFinally: () => setIsLoading(false),
         onSuccess: res => {
           console.log(res)
-          // if (response.ok) {
-          //   console.log('Data submitted successfully')
-          // } else {
-          //   console.error('Failed to submit data')
-          // }
         },
       })
     } catch (error) {
@@ -66,105 +63,136 @@ const ContentParser = () => {
 
   return (
     <div className="custom-page">
-      <h1>Parser form</h1>
-      <br />
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="brand">Brand:</label>
-          <select
-            id="brand"
-            value={selectedBrand}
-            onChange={e => setSelectedBrand(e.target.value)}
-          >
-            <option value="">Select a brand</option>
-            {brands.map(brand => (
-              <option key={brand} value={brand}>
-                {brand}
-              </option>
-            ))}
-          </select>
-          {errors.selectedBrand && (
-            <span className="error">{errors.selectedBrand}</span>
-          )}
-        </div>
-        <div className="form-group">
-          <label htmlFor="model">Model:</label>
-          <select
-            id="model"
-            value={selectedModel}
-            onChange={e => setSelectedModel(e.target.value)}
-          >
-            <option value="">Select a model</option>
-            {models.map(model => (
-              <option key={model} value={model}>
-                {model}
-              </option>
-            ))}
-          </select>
-          {errors.selectedModel && (
-            <span className="error">{errors.selectedModel}</span>
-          )}
-        </div>
-        <div className="form-group">
-          <label>Production Years (by default is {DEFAULT_YEAR}):</label>
-          <select
-            value={productionYearFrom}
-            onChange={e => setProductionYearFrom(e.target.value)}
-          >
-            <option value="2017">Select year</option>
-            {yearsFromAnyToCurrent().map((year, index) => (
-              <option key={index} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          {/*<input type="number" placeholder="From" value={productionYearFrom} onChange={(e) => setProductionYearFrom(e.target.value)} />*/}
-          {errors.productionYearFrom && (
-            <span className="error">{errors.productionYearFrom}</span>
-          )}
-          <select
-            value={productionYearTo}
-            onChange={e => setProductionYearTo(e.target.value)}
-          >
-            <option value=""></option>
-            {yearsFromAnyToCurrent().map((year, index) => (
-              <option key={index} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          {/*<input type="number" placeholder="To" value={productionYearTo}*/}
-          {/*       onChange={(e) => setProductionYearTo(e.target.value)}/>*/}
-          {errors.productionYearTo && (
-            <span className="error">{errors.productionYearTo}</span>
-          )}
-        </div>
-        <div
-          className="form-group price-interval"
-          style={{ marginBottom: '15px' }}
-        >
-          <label>Price:</label>
-          <div className="interval">
-            <input
-              type="number"
-              placeholder="From"
-              value={priceFrom}
-              onChange={e => setPriceFrom(e.target.value)}
-            />
-            {errors.priceFrom && (
-              <span className="error">{errors.priceFrom}</span>
-            )}
-            <input
-              type="number"
-              placeholder="To"
-              value={priceTo}
-              onChange={e => setPriceTo(e.target.value)}
-            />
-            {errors.priceTo && <span className="error">{errors.priceTo}</span>}
-          </div>
-        </div>
-        <button type="submit">Run parser</button>
-      </form>
+      <h1 style={{ marginBottom: '20px' }}>Parser form</h1>
+
+      <Formik
+        initialValues={initialFormValues}
+        validationSchema={parserValidationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ setFieldValue }) => {
+          return (
+            <Form className="parser-form">
+              <div className="form-group">
+                <p>
+                  <span>*Brand:</span>
+                  <ErrorMessage
+                    name="selectedBrand"
+                    component="span"
+                    className="error-message"
+                  />
+                </p>
+
+                <Field
+                  as="select"
+                  name="selectedBrand"
+                  onChange={e => {
+                    const value = e.target.value
+                    setSelectedBrand(value)
+                    setFieldValue('selectedBrand', value)
+                  }}
+                >
+                  <option disabled hidden value="">
+                    Select a brand
+                  </option>
+                  {brands.map(brand => (
+                    <option key={brand} value={brand}>
+                      {brand}
+                    </option>
+                  ))}
+                </Field>
+              </div>
+
+              <div className="form-group">
+                <p>
+                  <span>*Model:</span>
+                  <ErrorMessage
+                    name="selectedModel"
+                    component="span"
+                    className="error-message"
+                  />
+                </p>
+                <Field
+                  disabled={models.length === 0}
+                  as="select"
+                  name="selectedModel"
+                >
+                  <option disabled hidden value="">
+                    {models.length === 0
+                      ? 'First choose a brand'
+                      : 'Select a model'}
+                  </option>
+                  {models.map(model => (
+                    <option key={model} value={model}>
+                      {model}
+                    </option>
+                  ))}
+                </Field>
+              </div>
+
+              <div className="form-group">
+                <p>
+                  <span>Production years:</span>
+                  <ErrorMessage
+                    name="productionYearFrom"
+                    component="span"
+                    className="error-message"
+                  />
+                </p>
+                <Field as="select" name="productionYearFrom">
+                  {yearsFromAnyToCurrent().map(year => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </Field>
+
+                <Field as="select" name="productionYearTo">
+                  <option disabled hidden value="">
+                    Select 'to' year
+                  </option>
+                  {yearsFromAnyToCurrent().map(year => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name="productionYearTo"
+                  component="span"
+                  className="error-message"
+                />
+              </div>
+
+              <div
+                className="form-group price-interval"
+                style={{ marginBottom: '15px' }}
+              >
+                <p>
+                  <span>Price:</span>
+                  <ErrorMessage
+                    name="priceFrom"
+                    component="span"
+                    className="error-message"
+                  />
+                </p>
+                <Field name="priceFrom" placeholder="From" />
+
+                <ErrorMessage
+                  name="priceTo"
+                  component="span"
+                  className="error-message"
+                />
+                <Field name="priceTo" placeholder="To" />
+              </div>
+
+              <button type="submit">Run parser</button>
+
+              {isLoading && <Loader />}
+            </Form>
+          )
+        }}
+      </Formik>
     </div>
   )
 }

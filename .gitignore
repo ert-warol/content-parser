@@ -115,7 +115,8 @@ node_modules
 .nyc_output
 coverage
 .DS_store
-
+.adminjs
+adminjs/
 .adminbro
 .idea
 
