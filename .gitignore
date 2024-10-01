@@ -121,3 +121,6 @@ coverage
 
 # Ignore sensitive files
 .env
+
+# Ignore build files
+.adminjs

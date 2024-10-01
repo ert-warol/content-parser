@@ -10,4 +10,4 @@ export const getModelsByOption = (option, options) =>
   api(options).get(`/brand/models/options?option=${option}`)
 
 export const createOptions = (payload = {}, options) =>
-  api(options).post('/options/create', payload)
+  api(options).post('/brand/models/create', payload)
