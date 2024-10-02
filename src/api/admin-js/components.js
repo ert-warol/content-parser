@@ -6,7 +6,8 @@ const add = (...args) => componentLoader.add(...args)
 
 export const Components = {
   CustomImage: add('CustomImage', './components/CustomImage.jsx'),
-  CustomTitle: add('CustomTitle', './components/CustomTitle.jsx'),
+  CustomListTitle: add('CustomListTitle', './components/CustomListTitle.jsx'),
+  CustomShowTitle: add('CustomShowTitle', './components/CustomShowTitle.jsx'),
 }
 
 export const Pages = {

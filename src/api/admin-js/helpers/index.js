@@ -3,11 +3,22 @@ import * as Yup from 'yup'
 export const URL = 'https://www.mobile.bg'
 export const DEFAULT_YEAR = 2017
 
+export const yearsFromAnyToCurrent = (startYear = DEFAULT_YEAR) => {
+  const currentYear = new Date().getFullYear()
+  const years = []
+
+  for (let year = startYear; year <= currentYear; year++) {
+    years.push(year)
+  }
+
+  return years
+}
+
 export const parserValidationSchema = Yup.object()
   .shape({
     selectedBrand: Yup.string().required('Required'),
     selectedModel: Yup.string().required('Required'),
-    productionYearFrom: Yup.string().required('Required'),
+    productionYearFrom: Yup.string(),
     productionYearTo: Yup.string(),
     priceFrom: Yup.number('Invalid value')
       .positive('Invalid value')

@@ -11,11 +11,6 @@ export const option = {
     contentParser: {
       component: Pages.ContentParserPage,
       label: 'Content parser',
-      handler: async () => {
-        return {
-          text: 'I am fetched from the backend',
-        }
-      },
     },
     settings: {
       component: Pages.SettingsPage,
@@ -48,9 +43,9 @@ export const option = {
         ],
         showProperties: [
           'img',
+          'title',
           'category',
           'link',
-          'title',
           'price',
           'proizvodstvo',
           'dvigatel',
@@ -76,8 +71,8 @@ export const option = {
             type: 'string',
             description: 'Title and link to the announcement in the site',
             components: {
-              list: Components.CustomTitle,
-              show: Components.CustomTitle,
+              list: Components.CustomListTitle,
+              show: Components.CustomShowTitle,
             },
           },
         },
