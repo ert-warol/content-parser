@@ -11,11 +11,6 @@ export const option = {
     contentParser: {
       component: Pages.ContentParserPage,
       label: 'Content parser',
-      handler: async () => {
-        return {
-          text: 'I am fetched from the backend',
-        }
-      },
     },
     settings: {
       component: Pages.SettingsPage,

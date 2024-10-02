@@ -22,16 +22,6 @@
   color: var(--primary-color);
 }
 
-.parser-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.direction-column {
-  flex-direction: column;
-}
-
 .custom-field {
   padding: 10px;
   border: 1px solid var(--primary-color);
@@ -68,24 +58,18 @@ button[type='submit']:hover {
   background-color: var(--primary-color) !important;
 }
 
+/* pseudo-tailwind */
+
 .text-gray {
   color: gray;
 }
 
-.parser-form-select {
+.relative {
   position: relative;
 }
 
-.parser-form-select .custom-field {
+.w-full {
   width: 100%;
-}
-
-.parser-form-select .select-icon {
-  position: absolute;
-  top: 30%;
-  right: 24px;
-  z-index: 10;
-  cursor: pointer;
 }
 
 .flex {
@@ -108,6 +92,10 @@ button[type='submit']:hover {
   flex: 1 1 0%;
 }
 
-.wrap {
+.flex-wrap {
   flex-wrap: wrap;
+}
+
+.flex-col {
+  flex-direction: column;
 }
