@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Formik, Form, Field } from 'formik'
 import { useNotice } from 'adminjs'
-import { Loader } from '@adminjs/design-system'
 
 import Select from '../components/Select'
 import LabelWithError from '../components/LabelWithError'
+import Progress from '../components/Progress'
 
 import { getModelsByOption, startParsing } from '../services/api-service'
 import {
@@ -156,7 +156,6 @@ const ContentParser = () => {
                     name="currency"
                     optionValues={currencies}
                     placeholder="Curr."
-                    clearable
                     flex={false}
                   />
                   <Field
@@ -176,7 +175,7 @@ const ContentParser = () => {
                 Run parser
               </button>
 
-              {isLoading && <Loader />}
+              <Progress isLoading={isLoading} />
             </Form>
           )
         }}

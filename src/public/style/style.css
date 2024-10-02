@@ -1,12 +1,14 @@
 /* styles.css */
 :root {
-  --primary-color: #2e7d32;
+  --primary-color: #4d70eb;
+  --primary-light-color: #d5d9f7;
+  --primary-dark-color: #1538b7;
 }
 
 #settings-page,
 .custom-page {
   margin: 0 auto;
-  background-color: #e0f7e0;
+  background-color: var(--primary-light-color);
   padding: 20px;
 }
 
@@ -51,11 +53,12 @@ button[type='submit'] {
 }
 
 button[type='submit']:hover {
-  background-color: #1b5e20;
+  background-color: var(--primary-dark-color);
 }
 
-.lds-facebook div {
-  background-color: var(--primary-color) !important;
+button[type='submit']:disabled {
+  cursor: not-allowed;
+  background-color: gray;
 }
 
 /* pseudo-tailwind */
