@@ -1,7 +1,8 @@
 import axios from 'axios'
-
+// import { ApiClient } from 'adminjs';
 class Api {
   constructor({
+    // baseURL = ApiClient.getBaseUrl()
     baseURL = '/',
     timeout = 120000,
     headers = {},

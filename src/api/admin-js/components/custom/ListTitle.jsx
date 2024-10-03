@@ -1,9 +1,10 @@
 import React from 'react'
 import { styled } from '@adminjs/design-system/styled-components'
-import AnnouncementLink from './AnnouncementLink'
+import AnnouncementLink from '../AnnouncementLink'
 
 const Wrapper = styled.div`
   max-width: 250px;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   gap: 10px;
