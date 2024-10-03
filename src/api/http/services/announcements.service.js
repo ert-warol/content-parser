@@ -2,31 +2,22 @@ import puppeteer from 'puppeteer'
 
 import Announcements from './../models/announcements.model.js'
 import { selectors } from '../helpers/selectors.js'
+import OptionDb from '../helpers/OptionDb.js'
 
-export const processingAnnouncements = async params => {
-	const dataObj = {
-		item: [],
-		errors: [],
-	}
-
+export const getDashboardData = async params => {
 	try {
-		const browser = await puppeteer.launch()
-		const page = await browser.newPage()
+		const query = `SELECT 
+	    MAX(price) AS max_price,
+	    MIN(price) AS min_price,
+	    FLOOR(AVG(price)) AS avg_price
+		FROM 
+		  announcements
+		WHERE 
+  		price > 0;`
 
-		await page.goto(params.url)
-
-		const popularCategories = await page.evaluate(getPopularCategories)
-
-		await page.close()
-
-		const promises = [popularCategories[0]].map(category => processAnnouncementsFromCategory({ category, domain, browser }))
-		const processedCategories = await Promise.allSettled(promises)
-
-		await browser.close()
+		return await OptionDb.getByCustomQuery(Announcements, query)
 	} catch (err) {
-		console.error('An error occurred:', err)
-
-		dataObj.errors.push(err.message)
+		console.error(err)
 	}
 }
 
