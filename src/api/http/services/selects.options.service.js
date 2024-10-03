@@ -54,7 +54,7 @@ export async function processingAllSelects () {
 
 		return optionSite.get()
 	})
-	const optionCurrency = new OptionSite({ option: 'currency', value: '', goto: 'https://www.mobile.bg/search/avtomobili-dzhipove' })
+	const optionCurrency = new OptionSite({ option: 'currency', value: '', goto: process.env.FILTERS_URL })
 
 	promises.push(optionCurrency.get())
 
