@@ -14,8 +14,13 @@ class OptionSite extends Option {
 			models: '.f3.akMarkWrapper .scroll .a span',
 			yearOfProduction: '.f7',
 			sortBy: '.f8',
-			modelsOptions: '#akSearchModeli .scroll .a span'
+			modelsOptions: '#akSearchModeli .scroll .a span',
+			moreFilters: '.searchForms.AUTO .moreFilters',
+			priceFrom: 'form table table:nth-child(4) tbody tr:nth-child(3) td:nth-child(2)',
+			priceTo: 'form table table:nth-child(4) tbody tr:nth-child(3) td:nth-child(4)',
+			currency: 'form table table:nth-child(4) tbody tr:nth-child(3) td:nth-child(5) select option',
 		}
+		this.goto = data.goto || ''
 	}
 
 	async get () {
@@ -32,7 +37,15 @@ class OptionSite extends Option {
 			await page.evaluate(select => selectOptionMenu('akSearchMarki', this, select), this.option)
 			await page.waitForSelector(this.selectors.modelsGeneral)
 		}
-		const options = await page.evaluate(this.getOptionsOfSelect, this.selectors[this.value])
+
+		if (this.option === 'currency') {
+			await page.goto(this.goto)
+			await page.waitForSelector(this.selectors.currency)
+		}
+
+		const options = this.option === 'currency'
+			? await page.evaluate(this.getOptionsFromMoreFilters, this.selectors.currency)
+			: await page.evaluate(this.getOptionsOfSelect, this.selectors[this.value])
 
 		await page.close()
 		await browser.close()
@@ -49,7 +62,7 @@ class OptionSite extends Option {
 
 			await page.goto(process.env.BASE_URL)
 			await page.waitForSelector(this.selectors.searchForm)
-
+			await page.evaluate(this.acceptСookies)
 			const init = await page.evaluate(this.initFormSearch, this.selectors.autoDiv)
 
 			if (!init.success) {
@@ -66,10 +79,6 @@ class OptionSite extends Option {
 		}
 	}
 
-	selectOptionMenu (select) {
-		selectOptionMenu('akSearchMarki', this, select)
-	}
-
 	initFormSearch (selector) {
 		try {
 			const autoDiv = document.querySelector(selector)
@@ -80,9 +89,9 @@ class OptionSite extends Option {
 
 			autoDiv.click()
 
-			return {success: true, errors: []}
+			return { success: true, errors: [] }
 		} catch (e) {
-			return {success: false, errors: [e.message]}
+			return { success: false, errors: [e.message] }
 		}
 	}
 
@@ -98,6 +107,22 @@ class OptionSite extends Option {
 
 				return modelNames
 			}, [])
+	}
+
+	getOptionsFromMoreFilters (selector) {
+		const currencySelect = document.querySelectorAll(selector)
+
+		return Array.from(currencySelect).map(element => element.label)
+	}
+
+	acceptСookies () {
+		const agreeCookiesBtn = document.querySelector('#cookiescript_buttons #cookiescript_accept')
+
+		agreeCookiesBtn.click()
+	}
+
+	goToFormPage () {
+		// const agreeCoociesBtn = document.querySelector('#cookiescript_buttons #cookiescript_accept')
 	}
 }
 
