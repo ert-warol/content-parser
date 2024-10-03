@@ -1,10 +1,10 @@
-import { proceed, parsingContentByParams } from '../controllers/announcements.controller.js'
+import { dashboard, parsingContentByParams } from '../controllers/announcements.controller.js'
 
 export default (fastify, _opts, done) => {
 	fastify.route({
-		method: 'POST',
-		url: '/announcements/proceed',
-		handler: proceed,
+		method: 'GET',
+		url: '/announcements/dashboard',
+		handler: dashboard,
 		// schema: authSignInShopifyCallbackSchema
 	})
 
