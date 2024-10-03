@@ -5,4 +5,8 @@ export default class AnnouncementsRepository {
     const url = 'announcements/parsingContentByParams'
     return api(options).post(url, payload)
   }
+  static getPrices(options) {
+    const url = 'announcements/dashboard'
+    return api(options).get(url)
+  }
 }

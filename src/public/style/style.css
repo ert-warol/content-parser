@@ -106,3 +106,15 @@ section[data-css='notice'] {
 .flex-col {
   flex-direction: column;
 }
+
+.text-xl {
+  font-size: 1.25em;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.mb-8 {
+  margin-bottom: 2em;
+}
