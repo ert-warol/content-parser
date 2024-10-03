@@ -6,7 +6,8 @@ import Select from '../components/Select'
 import LabelWithError from '../components/LabelWithError'
 import Progress from '../components/Progress'
 
-import { getModelsByOption, startParsing } from '../services/api-service'
+import SelectsRepository from '../repositories/SelectsRepository'
+import AnnouncementsRepository from '../repositories/AnnouncementsRepository'
 import {
   URL,
   DEFAULT_YEAR,
@@ -41,7 +42,7 @@ const ContentParser = () => {
     }
 
     try {
-      await startParsing(data, {
+      await AnnouncementsRepository.startParsing(data, {
         onRequest: () => setIsLoading(true),
         onFinally: () => setIsLoading(false),
         onSuccess: res => {
@@ -59,7 +60,12 @@ const ContentParser = () => {
 
   // Fetch brands on component mount
   useEffect(() => {
-    getModelsByOption('brands', {
+    // SelectsRepository.getByOption('currency', {
+    //   onSuccess: res => {
+    //     console.log(res)
+    //   },
+    // })
+    SelectsRepository.getByOption('brands', {
       onSuccess: res => {
         console.log('brands response -> ', res)
         setBrands(res?.options || [])
@@ -70,7 +76,7 @@ const ContentParser = () => {
   // Fetch models when a brand is selected
   useEffect(() => {
     if (selectedBrand) {
-      getModelsByOption(selectedBrand, {
+      SelectsRepository.getByOption(selectedBrand, {
         onSuccess: res => {
           console.log('Models response -> ', res)
           setModels(res?.options || [])
