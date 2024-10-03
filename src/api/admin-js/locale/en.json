@@ -7,5 +7,25 @@
     "contentParser": "Content parser",
     "settings": "Settings"
   },
+  "properties": {
+    "id": "Id",
+    "updatedAt": "Updated at",
+    "createdAt": "Created at",
+    "title": "Title",
+    "category": "Category",
+    "price": "Price",
+    "link": "Link",
+    "img": "Img",
+    "proizvodstvo": "Proizvodstvo",
+    "dvigatel": "Dvigatel",
+    "skorosti": "Skorosti",
+    "probeg": "Probeg",
+    "moshtnost": "Moshtnost",
+    "euro": "Euro"
+  },
+  "messages": {
+    "Image": "Image",
+    "Title": "Title"
+  },
   "components.LanguageSelector.availableLanguages.bg": "Български"
 }
