@@ -1,5 +1,4 @@
-import Options from "../models/options.model.js"
-import OptionSite from "./OptionSite.js";
+import Options from '../models/options.model.js'
 
 class OptionDb {
 	static async get (select) {

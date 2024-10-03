@@ -1,34 +1,8 @@
 import puppeteer from 'puppeteer'
 
 import Announcements from './../models/announcements.model.js'
+import OptionDb from '../helpers/OptionDb.js'
 import { selectors } from '../helpers/selectors.js'
-
-export const processingAnnouncements = async params => {
-	const dataObj = {
-		item: [],
-		errors: [],
-	}
-
-	try {
-		const browser = await puppeteer.launch()
-		const page = await browser.newPage()
-
-		await page.goto(params.url)
-
-		const popularCategories = await page.evaluate(getPopularCategories)
-
-		await page.close()
-
-		const promises = [popularCategories[0]].map(category => processAnnouncementsFromCategory({ category, domain, browser }))
-		const processedCategories = await Promise.allSettled(promises)
-
-		await browser.close()
-	} catch (err) {
-		console.error('An error occurred:', err)
-
-		dataObj.errors.push(err.message)
-	}
-}
 
 export const parsingContentByParamsService = async params => {
 	const result = {
@@ -36,12 +10,14 @@ export const parsingContentByParamsService = async params => {
 		message: '',
 		errors: [],
 	}
-	const brands = params.selectedBrand || await OptionDb.get('brands')
+	const brands = params.selectedBrand
+		? [params.selectedBrand]
+		: (await OptionDb.get('brands')).options
 	const model = params.selectedBrand && params.selectedModel ? params.selectedModel : ''
 
 	try {
 		const browser = await puppeteer.launch()
-		const promises = [brands].map(brand => processAnnouncementsFromCategory(
+		const promises = brands.map(brand => processAnnouncementsFromCategory(
 			{ browser, url: params.url, brand, model, year: params.productionYearFrom }
 		))
 		const status = await Promise.allSettled(promises)
@@ -58,6 +34,33 @@ export const parsingContentByParamsService = async params => {
 		dataObj.errors.push(err.message)
 	}
 }
+
+// export const processingAnnouncements = async params => {
+// 	const dataObj = {
+// 		item: [],
+// 		errors: [],
+// 	}
+//
+// 	try {
+// 		const browser = await puppeteer.launch()
+// 		const page = await browser.newPage()
+//
+// 		await page.goto(params.url)
+//
+// 		const popularCategories = await OptionDb.get('brands')
+//
+// 		await page.close()
+//
+// 		const promises = popularCategories.map(category => processAnnouncementsFromCategory({ category, domain, browser }))
+// 		const processedCategories = await Promise.allSettled(promises)
+//
+// 		await browser.close()
+// 	} catch (err) {
+// 		console.error('An error occurred:', err)
+//
+// 		dataObj.errors.push(err.message)
+// 	}
+// }
 
 async function processAnnouncementsFromCategory ({ browser, url, brand, model, year }) {
 	try {
@@ -323,7 +326,9 @@ function validateForResults () {
 }
 
 function sortBy () {
-		const sortBySelect = document.querySelector(selectors.sortBy)
+	const sortBySelect = document.querySelector(selectors.sortBy)
 
-		sortBySelect.selectedIndex = 4
+	sortBySelect.selectedIndex = 4
+
+	javascript:sef_searchsubmit('3',document.search);
 }
