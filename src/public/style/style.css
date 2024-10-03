@@ -61,6 +61,10 @@ button[type='submit']:disabled {
   background-color: gray;
 }
 
+section[data-css='notice'] {
+  right: 0;
+}
+
 /* pseudo-tailwind */
 
 .text-gray {
