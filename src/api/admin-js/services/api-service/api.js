@@ -2,7 +2,7 @@ import axios from 'axios'
 
 class Api {
   constructor({
-    baseURL = '',
+    baseURL = '/',
     timeout = 120000,
     headers = {},
     onSuccess = null,
