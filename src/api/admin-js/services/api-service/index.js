@@ -7,7 +7,7 @@ export const startParsing = (payload, options) =>
   api(options).post('announcements/parsingContentByParams', payload)
 
 export const getModelsByOption = (option, options) =>
-  api(options).get(`brand/models/options?option=${option}`)
+  api(options).get(`selects/options?option=${option}`)
 
 export const createOptions = (payload = {}, options) =>
-  api(options).post('options/create', payload)
+  api(options).post('selects/options/create', payload)

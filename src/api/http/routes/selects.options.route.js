@@ -1,23 +1,23 @@
-import { create, upsert, get } from '../controllers/brands.models.controller.js'
+import { create, upsert, get } from '../controllers/selects.options.controller.js'
 
 export default (fastify, _opts, done) => {
 	fastify.route({
 		method: 'GET',
-		url: '/brand/models/options',
+		url: '/selects/options',
 		handler: get,
 		// schema: authSignInShopifySchema
 	})
 
 	fastify.route({
 		method: 'POST',
-		url: '/brand/models/create',
+		url: '/selects/options/create',
 		handler: create,
 		// schema: authSignInShopifySchema
 	})
 
 	fastify.route({
 		method: 'PUT',
-		url: '/brand/models/upsert',
+		url: '/selects/options/upsert',
 		handler: upsert,
 		// schema: authSignInShopifySchema
 	})

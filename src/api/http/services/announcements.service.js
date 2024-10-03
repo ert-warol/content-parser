@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer'
 
 import Announcements from './../models/announcements.model.js'
+import { selectors } from '../helpers/selectors.js'
 
 export const processingAnnouncements = async params => {
 	const dataObj = {
@@ -32,7 +33,7 @@ export const processingAnnouncements = async params => {
 export const parsingContentByParamsService = async params => {
 	const result = {
 		status: 'in process',
-		messege: '',
+		message: '',
 		errors: [],
 	}
 	const brands = params.selectedBrand || await OptionDb.get('brands')
@@ -84,6 +85,8 @@ async function processAnnouncementsFromCategory ({ browser, url, brand, model, y
 		await page.evaluate(selectBrand, brand)
 		await page.waitForSelector('.f7')
 		await page.evaluate(goToBrandPage, option)
+		await page.goto(process.env.FILTERS_URL)
+		await page.evaluate(sortBy)
 		await page.waitForSelector('.resultsInfoBox')
 
 		const contentExist = await page.evaluate(validateForResults)
@@ -317,4 +320,10 @@ function validateForResults () {
 	const paginationExist = document.querySelector('.pagination-wrapper')
 
 	return !!paginationExist
+}
+
+function sortBy () {
+		const sortBySelect = document.querySelector(selectors.sortBy)
+
+		sortBySelect.selectedIndex = 4
 }

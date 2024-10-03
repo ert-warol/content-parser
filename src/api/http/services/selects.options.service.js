@@ -54,6 +54,10 @@ export async function processingAllSelects () {
 
 		return optionSite.get()
 	})
+	const optionCurrency = new OptionSite({ option: 'currency', value: '', goto: process.env.FILTERS_URL })
+
+	promises.push(optionCurrency.get())
+
 	const items = await Promise.allSettled(promises)
 
 	items.filter(item => item.status === 'fulfilled')
