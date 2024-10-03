@@ -31,7 +31,7 @@ const ContentParser = () => {
     productionYearTo: '',
     priceFrom: '',
     priceTo: '',
-    currency: '',
+    currency: 'лв.',
   }
 
   const handleSubmit = async values => {
@@ -94,11 +94,12 @@ const ContentParser = () => {
               {/****************** Brand select input ****************/}
 
               <div className="flex flex-col gap-5">
-                <LabelWithError label="*Brand:" field="selectedBrand" />
+                <LabelWithError label="Brand:" field="selectedBrand" />
                 <Select
                   name="selectedBrand"
                   optionValues={brands}
                   placeholder="Select a brand"
+                  clearable
                   onChange={e => {
                     const value = e.target.value
                     setSelectedBrand(value)
@@ -110,11 +111,12 @@ const ContentParser = () => {
               {/****************** Model select input ****************/}
 
               <div className="flex flex-col gap-5">
-                <LabelWithError label="*Model:" field="selectedModel" />
+                <LabelWithError label="Model:" field="selectedModel" />
                 <Select
                   disabled={models.length === 0}
                   name="selectedModel"
                   optionValues={models}
+                  clearable
                   placeholder={
                     models.length === 0
                       ? 'First choose a brand'

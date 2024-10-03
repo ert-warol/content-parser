@@ -16,8 +16,8 @@ export const yearsFromAnyToCurrent = (startYear = DEFAULT_YEAR) => {
 
 export const parserValidationSchema = Yup.object()
   .shape({
-    selectedBrand: Yup.string().required('Required'),
-    selectedModel: Yup.string().required('Required'),
+    selectedBrand: Yup.string(),
+    selectedModel: Yup.string(),
     productionYearFrom: Yup.string(),
     productionYearTo: Yup.string(),
     priceFrom: Yup.number('Invalid value')
