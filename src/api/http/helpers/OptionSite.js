@@ -108,10 +108,6 @@ class OptionSite extends Option {
 
 		agreeCookiesBtn.click()
 	}
-
-	goToFormPage () {
-		// const agreeCoociesBtn = document.querySelector('#cookiescript_buttons #cookiescript_accept')
-	}
 }
 
 export default OptionSite
