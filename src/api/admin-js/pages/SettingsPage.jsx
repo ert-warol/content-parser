@@ -1,11 +1,11 @@
 import React from 'react'
-import { createOptions } from '../services/api-service'
+import SelectsRepository from '../repositories/SelectsRepository'
 
 const SettingsPage = () => {
   const handleSubmit = async e => {
     e.preventDefault()
     try {
-      const result = await createOptions()
+      const result = await SelectsRepository.createOptions()
       console.log('result', result)
     } catch (error) {
       console.error('Error saving record:', error)

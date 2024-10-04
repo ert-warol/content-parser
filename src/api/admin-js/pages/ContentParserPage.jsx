@@ -6,7 +6,8 @@ import Select from '../components/Select'
 import LabelWithError from '../components/LabelWithError'
 import Progress from '../components/Progress'
 
-import { getModelsByOption, startParsing } from '../services/api-service'
+import SelectsRepository from '../repositories/SelectsRepository'
+import AnnouncementsRepository from '../repositories/AnnouncementsRepository'
 import {
   URL,
   DEFAULT_YEAR,
@@ -14,12 +15,11 @@ import {
   yearsFromAnyToCurrent,
 } from '../helpers'
 
-const currencies = ['USD', 'EUR', 'лв.']
-
 const ContentParser = () => {
   const [brands, setBrands] = useState([])
   const [selectedBrand, setSelectedBrand] = useState('')
   const [models, setModels] = useState([])
+  const [currencies, setCurrencies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   const addNotice = useNotice()
@@ -41,7 +41,7 @@ const ContentParser = () => {
     }
 
     try {
-      await startParsing(data, {
+      await AnnouncementsRepository.startParsing(data, {
         onRequest: () => setIsLoading(true),
         onFinally: () => setIsLoading(false),
         onSuccess: res => {
@@ -57,9 +57,14 @@ const ContentParser = () => {
     }
   }
 
-  // Fetch brands on component mount
+  // Fetch brands and currencies on component mount
   useEffect(() => {
-    getModelsByOption('brands', {
+    SelectsRepository.getByOption('currency', {
+      onSuccess: res => {
+        setCurrencies(res?.options || [])
+      },
+    }).catch(e => console.error('Error fetching currencies:', e))
+    SelectsRepository.getByOption('brands', {
       onSuccess: res => {
         console.log('brands response -> ', res)
         setBrands(res?.options || [])
@@ -70,7 +75,7 @@ const ContentParser = () => {
   // Fetch models when a brand is selected
   useEffect(() => {
     if (selectedBrand) {
-      getModelsByOption(selectedBrand, {
+      SelectsRepository.getByOption(selectedBrand, {
         onSuccess: res => {
           console.log('Models response -> ', res)
           setModels(res?.options || [])

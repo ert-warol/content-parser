@@ -1,10 +1,23 @@
-import Options from '../models/options.model.js'
+import Options from "../models/options.model.js"
+import OptionSite from "./OptionSite.js";
 
 class OptionDb {
 	static async get (select) {
 		const option = await Options.findOne({ where: { select }})
 
 		return option || {}
+	}
+
+	static async getByCustomQuery (model, query) {
+		const [data] = await sequelize.query(
+			query,
+			{
+				model,
+				mapToModel: true // Ensures the results are instances of the Projects model
+			}
+		)
+
+		return data.dataValues
 	}
 
 	static async save (option) {

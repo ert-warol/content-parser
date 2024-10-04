@@ -69,7 +69,7 @@ export const option = {
           },
           title: {
             type: 'string',
-            description: 'Title and link to the announcement in the site',
+            description: 'Title',
             components: {
               list: Components.CustomListTitle,
               show: Components.CustomShowTitle,

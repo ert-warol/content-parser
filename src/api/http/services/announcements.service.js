@@ -4,6 +4,25 @@ import Announcements from './../models/announcements.model.js'
 import OptionDb from '../helpers/OptionDb.js'
 import helper from '../helpers/helper.js'
 
+import { selectors } from '../helpers/selectors.js'
+import OptionDb from '../helpers/OptionDb.js'
+
+export const getDashboardData = async params => {
+	try {
+		const query = `SELECT 
+	    MAX(price) AS max_price,
+	    MIN(price) AS min_price,
+	    FLOOR(AVG(price)) AS avg_price
+		FROM 
+		  announcements
+		WHERE 
+  		price > 0;`
+
+		return await OptionDb.getByCustomQuery(Announcements, query)
+	} catch (err) {
+		console.error(err)
+	}
+}
 
 export const parsingContentByParamsService = async params => {
 	const result = {

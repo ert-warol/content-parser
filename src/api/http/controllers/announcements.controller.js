@@ -1,5 +1,21 @@
 import { parsingContentByParamsService } from '../services/announcements.service.js'
+import { getDashboardData, parsingContentByParamsService } from '../services/announcements.service.js'
 import { isValidUrl } from '../helpers/helper.js'
+
+
+
+export const dashboard = async (_request, _response) => {
+	try {
+		return {
+			data: await getDashboardData(),
+			errors: []
+		}
+	} catch (e) {
+		return {
+			error: e.message
+		}
+	}
+}
 
 export const parsingContentByParams = async (request, response) => {
 	const params = Object.fromEntries(Object.entries(request.body).filter(([_key, value]) => value))
