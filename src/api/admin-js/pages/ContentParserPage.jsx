@@ -15,12 +15,11 @@ import {
   yearsFromAnyToCurrent,
 } from '../helpers'
 
-const currencies = ['USD', 'EUR', 'лв.']
-
 const ContentParser = () => {
   const [brands, setBrands] = useState([])
   const [selectedBrand, setSelectedBrand] = useState('')
   const [models, setModels] = useState([])
+  const [currencies, setCurrencies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   const addNotice = useNotice()
@@ -58,13 +57,13 @@ const ContentParser = () => {
     }
   }
 
-  // Fetch brands on component mount
+  // Fetch brands and currencies on component mount
   useEffect(() => {
-    // SelectsRepository.getByOption('currency', {
-    //   onSuccess: res => {
-    //     console.log(res)
-    //   },
-    // })
+    SelectsRepository.getByOption('currency', {
+      onSuccess: res => {
+        setCurrencies(res?.options || [])
+      },
+    }).catch(e => console.error('Error fetching currencies:', e))
     SelectsRepository.getByOption('brands', {
       onSuccess: res => {
         console.log('brands response -> ', res)

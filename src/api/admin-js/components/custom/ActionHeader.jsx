@@ -8,10 +8,7 @@ const CustomActionHeader = props => {
 
   useEffect(() => {
     AnnouncementsRepository.getPrices({
-      onSuccess: res => {
-        console.log('res', res)
-        setPrices(res?.data || {})
-      },
+      onSuccess: res => setPrices(res?.data || {}),
     }).catch(console.error)
   }, [])
 
