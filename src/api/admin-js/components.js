@@ -11,6 +11,7 @@ export const Components = {
   CustomImage: add('CustomImage', './components/custom/Image.jsx'),
   CustomListTitle: add('CustomListTitle', './components/custom/ListTitle.jsx'),
   CustomShowTitle: add('CustomShowTitle', './components/custom/ShowTitle.jsx'),
+  Dashboard: add('Dashboard', './components/custom/Dashboard.jsx'),
 }
 
 export const Pages = {

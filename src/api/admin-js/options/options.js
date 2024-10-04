@@ -17,6 +17,12 @@ export const option = {
       label: 'Settings (demo)',
     },
   },
+  dashboard: {
+    component: Components.Dashboard,
+    handler: () => {
+      return { message: 'Hello world!' }
+    },
+  },
   componentLoader,
   resources: [
     {
