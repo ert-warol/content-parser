@@ -1,24 +1,15 @@
 import puppeteer from 'puppeteer'
+import { Readable } from 'stream'
 
 import Announcements from './../models/announcements.model.js'
 import OptionDb from '../helpers/OptionDb.js'
-import helper from '../helpers/helper.js'
-
+import { queries } from '../helpers/helper.js'
 import { selectors } from '../helpers/selectors.js'
-import OptionDb from '../helpers/OptionDb.js'
+import { puppeteerConsoleFunctions } from '../helpers/puppeteer.console.functions.js'
 
-export const getDashboardData = async params => {
+export const getDashboardData = async () => {
 	try {
-		const query = `SELECT 
-	    MAX(price) AS max_price,
-	    MIN(price) AS min_price,
-	    FLOOR(AVG(price)) AS avg_price
-		FROM 
-		  announcements
-		WHERE 
-  		price > 0;`
-
-		return await OptionDb.getByCustomQuery(Announcements, query)
+		return await OptionDb.getByCustomQuery(Announcements, queries.dashboardData)
 	} catch (err) {
 		console.error(err)
 	}
@@ -37,7 +28,7 @@ export const parsingContentByParamsService = async params => {
 
 	try {
 		const browser = await puppeteer.launch()
-		const promises = brands.map(brand => processAnnouncementsFromCategory(
+		const promises = brands.map(brand => processAnnouncements(
 			{ browser, url: params.url, brand, model, year: params.productionYearFrom }
 		))
 		const status = await Promise.allSettled(promises)
@@ -55,8 +46,11 @@ export const parsingContentByParamsService = async params => {
 	}
 }
 
-async function processAnnouncementsFromCategory ({ browser, url, brand, model, year }) {
+async function processAnnouncements ({ browser, url, brand, model, year }) {
 	try {
+		const stream = new Readable({
+			read() {}
+		})
 		const [announcementsFromDb, page] = await Promise.all([
 			Announcements.findAll({ where: { category: brand }, attributes: ['id'] }),
 			browser.newPage()
@@ -68,24 +62,26 @@ async function processAnnouncementsFromCategory ({ browser, url, brand, model, y
 			existNextPage: true,
 			counter: 0
 		}
-
 		const option = {
 			brand,
 			year,
 			model
 		}
+		const filters = {
+			year,
+			priceFrom: 0,
+			priceTo: 0,
+		}
 
 		await page.goto(url)
-		await page.evaluate(helper.goToFormPage)
+		await page.evaluate(puppeteerConsoleFunctions.goToFormPage)
 		await page.waitForSelector('.searchForms')
-		await page.evaluate(helper.selectBrand, brand)
-		await page.waitForSelector('.f7')
-		await page.evaluate(helper.goToBrandPage, option)
-		await page.goto(process.env.FILTERS_URL)
-		await page.evaluate(helper.sortBy)
+		await page.evaluate(puppeteerConsoleFunctions.goToBrandPage, option)
+		await page.waitForSelector('form[name="search"]')
+		await page.evaluate(puppeteerConsoleFunctions.moreFilters, selectors.sortBy)
 		await page.waitForSelector('.resultsInfoBox')
-
-		const contentExist = await page.evaluate(helper.validateForResults)
+		const contentExist = await page.evaluate(puppeteerConsoleFunctions.validateForResults)
+		const numberOfPages = await page.evaluate(puppeteerConsoleFunctions.getNumberOfPages)
 
 		if (!contentExist) {
 			await page.close()
@@ -98,8 +94,8 @@ async function processAnnouncementsFromCategory ({ browser, url, brand, model, y
 		while(mapOfAnnouncements.existNextPage) {
 			const announcements = []
 			const rejectedAnnouncementIds = []
-			const data = { category, announcementIds }
-			const { listOfItems, nextPage , ids } = await page.evaluate(helper.getMainDetails, data)
+			const data = { category: brand, announcementIds }
+			const { listOfItems, nextPage , ids } = await page.evaluate(puppeteerConsoleFunctions.getMainDetails, data)
 
 			if (!listOfItems.length) {
 				await page.goto(nextPage)
@@ -114,7 +110,7 @@ async function processAnnouncementsFromCategory ({ browser, url, brand, model, y
 				await page.goto(item.link)
 				await page.waitForSelector('.mainCarParams')
 
-				const mainItemParams = await page.evaluate(helper.addNewProperties, item)
+				const mainItemParams = await page.evaluate(puppeteerConsoleFunctions.addNewProperties, item)
 
 				announcements.push(mainItemParams)
 			}
@@ -135,10 +131,14 @@ async function processAnnouncementsFromCategory ({ browser, url, brand, model, y
 			await wittingForSelectors(page)
 
 			mapOfAnnouncements.counter += listOfItems.length
+
+			stream.push(JSON.stringify({ numberOfPages, page: currentPage, counter: mapOfAnnouncements.counter, inProgress: true }))
 		}
+		stream.push(JSON.stringify({ numberOfPages, page: currentPage, counter: mapOfAnnouncements.counter, inProgress: false }))
 		await page.close()
 
 		return 'Parsing completed.'
+
 	} catch (e) {
 		console.error('An error occurred:', e)
 	}

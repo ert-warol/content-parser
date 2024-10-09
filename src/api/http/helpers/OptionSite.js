@@ -103,11 +103,7 @@ class OptionSite extends Option {
 		return Array.from(currencySelect).map(element => element.label)
 	}
 
-	acceptСookies () {
-		const agreeCookiesBtn = document.querySelector('#cookiescript_buttons #cookiescript_accept')
 
-		agreeCookiesBtn.click()
-	}
 }
 
 export default OptionSite

@@ -1,4 +1,3 @@
-import { parsingContentByParamsService } from '../services/announcements.service.js'
 import { getDashboardData, parsingContentByParamsService } from '../services/announcements.service.js'
 import { isValidUrl } from '../helpers/helper.js'
 
