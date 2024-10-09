@@ -13,7 +13,7 @@ const CustomActionHeader = props => {
   }, [])
 
   useEffect(() => {
-    if (Object.keys(prices).length) {
+    if (Object.keys(prices).length && props.action.name === 'list') {
       const selfElement = document.querySelector(
         'section[data-css="announcements-list-action-header"]',
       )
