@@ -1,5 +1,5 @@
 import Options from "../models/options.model.js"
-import { sequelize } from "../../../libs/database/index.js"
+import OptionSite from "./OptionSite.js";
 
 class OptionDb {
 	static async get (select) {

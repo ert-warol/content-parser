@@ -6,10 +6,10 @@ export const selectors = {
 	modelsGeneral: '.f3.akMarkWrapper',
 	models: '.f3.akMarkWrapper .scroll .a span',
 	yearOfProduction: '.f7',
-	sortBy: 'form table table:nth-child(3) tbody tr:nth-child(3) td:nth-child(9) select',
+	sortBy: 'select[name="f20"]',
 	modelsOptions: '#akSearchModeli .scroll .a span',
 	moreFilters: '.searchForms.AUTO .moreFilters',
 	priceFrom: 'form table table:nth-child(4) tbody tr:nth-child(3) td:nth-child(2)',
 	priceTo: 'form table table:nth-child(4) tbody tr:nth-child(3) td:nth-child(4)',
-	currency: 'form table table:nth-child(4) tbody tr:nth-child(3) td:nth-child(5) select option'
+	currency: 'select[name="f9"] option'//'form table table:nth-child(4) tbody tr:nth-child(3) td:nth-child(5) select option'
 }
