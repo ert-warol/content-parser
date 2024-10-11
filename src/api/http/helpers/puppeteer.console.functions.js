@@ -93,7 +93,7 @@ export const puppeteerConsoleFunctions = {
 
 		return !!paginationExist
 	},
-	moreFilters: (selector) => {
+	moreFilters: selector => {
 		const sortBySelect = document.querySelector(selector)
 
 		sortBySelect.selectedIndex = 4
@@ -113,5 +113,47 @@ export const puppeteerConsoleFunctions = {
 
 			return counter
 		}, 0)
+	},
+	addNewProperties: item => {
+		const getFirstArrItem = str => { return Number(str.split(' ')[0])	}
+		const getLastArrItem = str => {
+			const arr = str.split(' ')
+			return arr[arr.length - 1]
+		}
+		const mainCarParams = document.querySelectorAll('.mainCarParams .item')
+		const img = document.querySelector('.owl-item.active .carouselimg.owl-lazy')
+
+		item['img'] = img ? img.getAttribute('src')  : 'none'
+
+		for (const child of Array.from(mainCarParams))  {
+			const [_label, value] = child.innerText.split('\n')
+			const [label] = Array.from(child.classList).filter(childClass => childClass !== 'item')
+
+			if (label === 'proizvodstvo') {
+				item[label] = getLastArrItem(value)
+			} else if (label === 'moshtnost') {
+				item[label] = getFirstArrItem(value)
+			} else if (label === 'probeg') {
+				item[label] = getFirstArrItem(value)
+			} else {
+				item[label] = value
+			}
+		}
+
+		if (!item['proizvodstvo']) {
+			const techData = document.querySelectorAll('.techData .item')
+			const dateOfProduction = Array.from(techData)
+				.reduce((value, item) => {
+					if (item.querySelectorAll('div')[0].innerText !== 'Дата на производство') {
+						return value
+					}
+
+					return item.querySelectorAll('div')[1].innerText
+				}, '')
+
+			item['proizvodstvo'] = getLastArrItem(dateOfProduction)
+		}
+
+		return item
 	}
 }

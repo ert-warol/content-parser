@@ -99,7 +99,7 @@ async function processAnnouncements ({ browser, url, brand, model, year }) {
 
 			if (!listOfItems.length) {
 				await page.goto(nextPage)
-				await wittingForSelectors(page)
+				await page.waitForSelector('.pagination-wrapper')
 
 				continue
 			}
@@ -134,7 +134,8 @@ async function processAnnouncements ({ browser, url, brand, model, year }) {
 
 			stream.push(JSON.stringify({ numberOfPages, page: currentPage, counter: mapOfAnnouncements.counter, inProgress: true }))
 		}
-		stream.push(JSON.stringify({ numberOfPages, page: currentPage, counter: mapOfAnnouncements.counter, inProgress: false }))
+		stream.push(null)
+
 		await page.close()
 
 		return 'Parsing completed.'
